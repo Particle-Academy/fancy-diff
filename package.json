@@ -1,0 +1,68 @@
+{
+  "name": "@particle-academy/fancy-diff",
+  "version": "0.0.0",
+  "description": "Client-side React UI for side-by-side document diffs with per-hunk accept/reject and merged output — Human+ UX, zero runtime deps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Particle-Academy/fancy-diff.git"
+  },
+  "homepage": "https://github.com/Particle-Academy/fancy-diff#readme",
+  "bugs": "https://github.com/Particle-Academy/fancy-diff/issues",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "tsup"
+  },
+  "peerDependencies": {
+    "@particle-academy/react-fancy": ">=2",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "@particle-academy/fancy-auto-common": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@particle-academy/fancy-auto-common": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@particle-academy/react-fancy": "^4.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ]
+}

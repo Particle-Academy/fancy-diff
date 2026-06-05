@@ -1,0 +1,29 @@
+/* @particle-academy/fancy-diff — diff viewer styles
+ *
+ * The component is styled primarily with react-fancy's Tailwind classes; this
+ * sheet only adds the few things utility classes cannot express cleanly:
+ * monospace rendering and tabular gutters. Import it once in your app:
+ *
+ *   import "@particle-academy/fancy-diff/styles.css";
+ */
+
+[data-fancy-diff] {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+[data-fancy-diff] [data-fancy-diff-body] {
+  overflow-x: auto;
+}
+
+/* Keep added/removed rows visually distinct even without Tailwind loaded. */
+[data-fancy-diff-hunk-type="add"] {
+  --fancy-diff-accent: 16 185 129;
+}
+[data-fancy-diff-hunk-type="remove"] {
+  --fancy-diff-accent: 244 63 94;
+}
+
+[data-fancy-diff-seg] {
+  padding: 0 1px;
+}
