@@ -1,6 +1,6 @@
 {
   "name": "@particle-academy/fancy-diff",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Client-side React UI for side-by-side document diffs with per-hunk accept/reject and merged output — Human+ UX, zero runtime deps",
   "repository": {
     "type": "git",
