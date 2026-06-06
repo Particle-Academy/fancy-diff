@@ -1,5 +1,7 @@
 # @particle-academy/fancy-diff
 
+[![Fancified](art/fancified.svg)](https://particle.academy)
+
 Client-side React UI for **side-by-side document diffs** with per-hunk
 accept / reject and a merged result — built for the Fancy UI **Human+**
 mission, where humans and agents share the same surface and trade control
