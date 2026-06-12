@@ -78,6 +78,7 @@ See [`demo.tsx`](./demo.tsx) for a full working example.
 | Prop | Type | Notes |
 | --- | --- | --- |
 | `source` | `{ before, after } \| { unified } \| { diff }` | Discriminated union, JSON-friendly. |
+| `variant` | `"review" \| "compare"` | `"review"` (default) is the accept/reject loop; `"compare"` is a read-only comparison with the acceptance UX removed. See below. |
 | `value` | `Record<hunkId, "accepted"\|"rejected"\|"pending">` | Controlled acceptance state. |
 | `onChange` | `(next, info) => void` | Fired on every accept/reject. |
 | `defaultValue` | `AcceptanceState` | Initial state when uncontrolled. |
@@ -97,6 +98,20 @@ See [`demo.tsx`](./demo.tsx) for a full working example.
 | `className` / `theme` / `header` | — | Passthrough / `"light"\|"dark"\|"auto"` / extra header node. |
 
 Ref handle: `getMergedResult()`, `getDiffs()`, `getAcceptance()`.
+
+## Two variants: review vs. compare
+
+`<FancyDiff>` does two jobs, picked with `variant`:
+
+- **`variant="review"`** (default) — the **trust-but-verify acceptance loop**: per-hunk accept/reject, accept-all / reject-all, acceptance status, and a merged result. This is the Human+ flow where an agent proposes an edit and a human ratifies it hunk by hunk.
+- **`variant="compare"`** — a **read-only comparison**. Same diff engine, same split/inline views and intra-line highlighting, but the accept/reject affordances are stripped out entirely: no per-hunk buttons, no accept-all/reject-all, no acceptance state. Hunk borders mark the change *type* (add / remove / replace) instead of an acceptance status. Acceptance props (`value`, `onChange`, `pendingMode`, …) are ignored.
+
+```tsx
+// Just show me what changed — no acceptance UI.
+<FancyDiff variant="compare" source={{ before, after }} />
+```
+
+Use `compare` for read-only side-by-sides — code review summaries, "what changed" panels, version history — and `review` when a human (or an embedded agent) needs to actually accept or reject the changes. The root carries a `data-fancy-diff-variant` handle for styling/automation.
 
 ## Customization points
 

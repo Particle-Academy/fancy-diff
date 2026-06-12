@@ -45,6 +45,16 @@ export interface GutterRenderArgs {
   side: "before" | "after" | "both";
 }
 
+/**
+ * What the viewer is *for*:
+ *   - `"review"`  — the trust-but-verify acceptance loop (per-hunk accept/reject,
+ *     accept-all/reject-all, acceptance status + merged result). The default.
+ *   - `"compare"` — a read-only comparison: no accept/reject affordances, no
+ *     acceptance state — just the diff. Acceptance props (`value`/`onChange`/
+ *     `pendingMode`/…) are ignored in this variant.
+ */
+export type DiffVariant = "review" | "compare";
+
 export interface FancyDiffProps {
   /**
    * Source of the diff (JSON-friendly discriminated union):
@@ -53,6 +63,12 @@ export interface FancyDiffProps {
    *   - `{ diff }`           — use a pre-built structured Diff (or Diff[])
    */
   source: DiffSource;
+
+  /**
+   * `"review"` (default) — accept/reject acceptance UX. `"compare"` — read-only
+   * comparison with the acceptance UX stripped out.
+   */
+  variant?: DiffVariant;
 
   /** Controlled acceptance state: hunkId -> "accepted" | "rejected" | "pending". */
   value?: AcceptanceState;

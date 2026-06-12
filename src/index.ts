@@ -7,6 +7,7 @@ export { FancyDiff } from "./components/FancyDiff";
 export type { FancyDiffHandle } from "./components/FancyDiff";
 export type {
   FancyDiffProps,
+  DiffVariant,
   DiffViewMode,
   MergedResult,
   AcceptanceChangeInfo,

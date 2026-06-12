@@ -50,6 +50,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
   function FancyDiff(props, ref) {
     const {
       source,
+      variant = "review",
       value,
       onChange,
       defaultValue,
@@ -71,6 +72,9 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
       theme = "auto",
       header,
     } = props;
+
+    // `compare` strips the whole acceptance UX — read-only comparison only.
+    const interactive = variant !== "compare";
 
     // Resolve source -> diffs. Memoized on identity of source + tokenizer.
     const diffs = useMemo(
@@ -195,12 +199,16 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
         <Badge color="zinc" variant="soft" size="sm">
           {counts.total} change{counts.total === 1 ? "" : "s"}
         </Badge>
-        <Badge color="emerald" variant="soft" size="sm">
-          {counts.accepted} accepted
-        </Badge>
-        <Badge color="amber" variant="soft" size="sm">
-          {counts.pending} pending
-        </Badge>
+        {interactive && (
+          <>
+            <Badge color="emerald" variant="soft" size="sm">
+              {counts.accepted} accepted
+            </Badge>
+            <Badge color="amber" variant="soft" size="sm">
+              {counts.pending} pending
+            </Badge>
+          </>
+        )}
         <span className="flex-1" />
         <Button
           size="sm"
@@ -211,25 +219,29 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
         >
           {mode === "split" ? "Split" : "Inline"}
         </Button>
-        <Separator orientation="vertical" className="h-5" />
-        <Button
-          size="sm"
-          variant="ghost"
-          icon="check"
-          onClick={() => setAll("accepted", "accept-all")}
-          data-fancy-diff-accept-all=""
-        >
-          Accept all
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          icon="x"
-          onClick={() => setAll("rejected", "reject-all")}
-          data-fancy-diff-reject-all=""
-        >
-          Reject all
-        </Button>
+        {interactive && (
+          <>
+            <Separator orientation="vertical" className="h-5" />
+            <Button
+              size="sm"
+              variant="ghost"
+              icon="check"
+              onClick={() => setAll("accepted", "accept-all")}
+              data-fancy-diff-accept-all=""
+            >
+              Accept all
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              icon="x"
+              onClick={() => setAll("rejected", "reject-all")}
+              data-fancy-diff-reject-all=""
+            >
+              Reject all
+            </Button>
+          </>
+        )}
       </div>
     ) : null;
 
@@ -266,6 +278,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
         )}
         data-fancy-diff=""
         data-fancy-diff-mode={mode}
+        data-fancy-diff-variant={variant}
       >
         {header}
         {toolbar}
@@ -279,6 +292,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
               mode={mode}
               statusOf={statusOf}
               pendingMode={pendingMode}
+              interactive={interactive}
               showGutter={showGutter}
               renderGutterCell={renderGutterCell}
               renderHunk={renderHunk}
@@ -298,6 +312,7 @@ interface FileBlockProps {
   mode: DiffViewMode;
   statusOf: (id: string) => AcceptanceStatus;
   pendingMode: boolean;
+  interactive: boolean;
   showGutter: boolean;
   renderGutterCell: (args: GutterRenderArgs) => ReactNode;
   renderHunk?: FancyDiffProps["renderHunk"];
@@ -311,6 +326,7 @@ function FileBlock({
   mode,
   statusOf,
   pendingMode,
+  interactive,
   showGutter,
   renderGutterCell,
   renderHunk,
@@ -338,6 +354,7 @@ function FileBlock({
             mode={mode}
             status={status}
             pendingMode={pendingMode}
+            interactive={interactive}
             showGutter={showGutter}
             renderGutterCell={renderGutterCell}
             accept={() => accept(hunk.id)}
@@ -369,6 +386,7 @@ interface HunkRowProps {
   mode: DiffViewMode;
   status: AcceptanceStatus;
   pendingMode: boolean;
+  interactive: boolean;
   showGutter: boolean;
   renderGutterCell: (args: GutterRenderArgs) => ReactNode;
   accept: () => void;
@@ -387,27 +405,33 @@ function HunkRow({
   mode,
   status,
   pendingMode,
+  interactive,
   showGutter,
   renderGutterCell,
   accept,
   reject,
 }: HunkRowProps) {
   const isChange = hunk.type !== "equal";
-  const dimmed = isChange && status === "rejected";
+  const dimmed = interactive && isChange && status === "rejected";
 
   return (
     <div
       data-fancy-diff-hunk={hunk.id}
       data-fancy-diff-hunk-type={hunk.type}
-      data-fancy-diff-hunk-status={isChange ? status : undefined}
+      data-fancy-diff-hunk-status={isChange && interactive ? status : undefined}
       role="row"
       className={cx(
         "group relative",
         dimmed && "opacity-50",
         isChange && "border-l-2",
-        isChange && status === "accepted" && "border-emerald-400",
-        isChange && status === "rejected" && "border-rose-300",
-        isChange && status === "pending" && "border-amber-300",
+        // review: the left border tracks acceptance status.
+        interactive && isChange && status === "accepted" && "border-emerald-400",
+        interactive && isChange && status === "rejected" && "border-rose-300",
+        interactive && isChange && status === "pending" && "border-amber-300",
+        // compare: no acceptance — the border marks the change *type* instead.
+        !interactive && hunk.type === "add" && "border-emerald-400",
+        !interactive && hunk.type === "remove" && "border-rose-300",
+        !interactive && hunk.type === "replace" && "border-amber-300",
         !isChange && "border-l-2 border-transparent",
       )}
     >
@@ -419,7 +443,7 @@ function HunkRow({
         <Inline hunk={hunk} showGutter={showGutter} renderGutterCell={renderGutterCell} />
       )}
 
-      {isChange && (
+      {isChange && interactive && (
         <div
           data-fancy-diff-hunk-actions=""
           className="absolute right-1.5 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"
