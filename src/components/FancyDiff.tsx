@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState,
@@ -46,6 +47,56 @@ function cx(...parts: (string | false | undefined | null)[]): string {
   return parts.filter(Boolean).join(" ");
 }
 
+/** True when the document root currently signals a dark theme. */
+function hostIsDark(): boolean {
+  if (typeof document === "undefined") return false;
+  const root = document.documentElement;
+  if (root.classList.contains("dark")) return true;
+  if (root.getAttribute("data-theme") === "dark") return true;
+  try {
+    if (getComputedStyle(root).colorScheme === "dark") return true;
+  } catch {
+    /* getComputedStyle can throw in detached/SSR contexts */
+  }
+  return false;
+}
+
+/**
+ * Resolve the effective dark state for a `theme` prop. `"dark"`/`"light"` are
+ * honored verbatim; `"auto"` probes the host (`.dark` / `data-theme` /
+ * `color-scheme` on <html>) and falls back to `prefers-color-scheme`,
+ * re-resolving when either changes so a host theme toggle flips the diff too.
+ */
+function useResolvedDark(theme: FancyDiffProps["theme"]): boolean {
+  const explicit = theme === "dark" ? true : theme === "light" ? false : null;
+  const [isDark, setIsDark] = useState<boolean>(explicit ?? false);
+
+  useEffect(() => {
+    if (explicit !== null) {
+      setIsDark(explicit);
+      return;
+    }
+    if (typeof window === "undefined") return;
+
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const resolve = () => setIsDark(hostIsDark() || !!mq?.matches);
+    resolve();
+
+    mq?.addEventListener?.("change", resolve);
+    const observer = new MutationObserver(resolve);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme", "style"],
+    });
+    return () => {
+      mq?.removeEventListener?.("change", resolve);
+      observer.disconnect();
+    };
+  }, [explicit]);
+
+  return isDark;
+}
+
 export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
   function FancyDiff(props, ref) {
     const {
@@ -75,6 +126,13 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
 
     // `compare` strips the whole acceptance UX — read-only comparison only.
     const interactive = variant !== "compare";
+
+    // Resolve `theme="auto"` at runtime: prefer an explicit host signal (a
+    // `.dark` class / `data-theme="dark"` / `color-scheme` on <html>), then fall
+    // back to `prefers-color-scheme`. Re-resolves on system + host changes so a
+    // theme toggle flips the diff with it. (theme="dark"/"light" are honored
+    // verbatim; SSR starts from the explicit value, then resolves on mount.)
+    const isDark = useResolvedDark(theme);
 
     // Resolve source -> diffs. Memoized on identity of source + tokenizer.
     const diffs = useMemo(
@@ -273,7 +331,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
         padding="none"
         className={cx(
           "fancy-diff overflow-hidden font-mono text-[13px] text-zinc-800 dark:text-zinc-100",
-          theme === "dark" && "dark",
+          isDark && "dark",
           className,
         )}
         data-fancy-diff=""
