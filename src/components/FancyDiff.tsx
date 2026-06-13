@@ -259,7 +259,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
     const renderGutterCell = (args: GutterRenderArgs): ReactNode => {
       if (renderGutter) return renderGutter(args);
       return (
-        <span className="select-none tabular-nums text-zinc-400 dark:text-zinc-600 text-[11px] pr-2 text-right inline-block min-w-[2.5rem]">
+        <span className="select-none tabular-nums text-zinc-400 dark:text-zinc-500 text-[11px] pr-2 text-right inline-block min-w-[2.5rem]">
           {args.side === "after"
             ? args.afterLineNo ?? ""
             : args.beforeLineNo ?? args.afterLineNo ?? ""}
@@ -272,7 +272,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
         variant="outlined"
         padding="none"
         className={cx(
-          "fancy-diff overflow-hidden font-mono text-[13px]",
+          "fancy-diff overflow-hidden font-mono text-[13px] text-zinc-800 dark:text-zinc-100",
           theme === "dark" && "dark",
           className,
         )}
@@ -394,10 +394,10 @@ interface HunkRowProps {
 }
 
 const sideBg: Record<string, string> = {
-  add: "bg-emerald-50 dark:bg-emerald-950/30",
-  remove: "bg-rose-50 dark:bg-rose-950/30",
-  replaceBefore: "bg-rose-50 dark:bg-rose-950/30",
-  replaceAfter: "bg-emerald-50 dark:bg-emerald-950/30",
+  add: "bg-emerald-50 dark:bg-emerald-500/10",
+  remove: "bg-rose-50 dark:bg-rose-500/10",
+  replaceBefore: "bg-rose-50 dark:bg-rose-500/10",
+  replaceAfter: "bg-emerald-50 dark:bg-emerald-500/10",
 };
 
 function HunkRow({
@@ -648,8 +648,8 @@ function renderSegments(segments: DiffSegment[], emphasis: "add" | "remove"): Re
     if (s.op === "equal") return <span key={i}>{s.text}</span>;
     const cls =
       emphasis === "add"
-        ? "bg-emerald-200/70 dark:bg-emerald-700/50 rounded-sm"
-        : "bg-rose-200/70 dark:bg-rose-700/50 rounded-sm";
+        ? "bg-emerald-200/70 dark:bg-emerald-400/25 rounded-sm"
+        : "bg-rose-200/70 dark:bg-rose-400/25 rounded-sm";
     return (
       <span key={i} className={cls} data-fancy-diff-seg={s.op}>
         {s.text}
