@@ -73,3 +73,4 @@ export type {
   AcceptanceStatus,
   WordTokenizer,
 } from "./diff/types";
+export { fileLabel } from "./diff/types";

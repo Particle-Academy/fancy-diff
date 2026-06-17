@@ -95,6 +95,19 @@ export interface DiffFileMeta {
   partial?: boolean;
 }
 
+/**
+ * The display path for a file header. Prefers the side that isn't `/dev/null`,
+ * so a **deletion** (`newPath === "/dev/null"`) shows its real `oldPath`, an
+ * **addition** shows `newPath`, and a **rename** shows `oldPath → newPath`.
+ * Returns `undefined` when there's no usable path. (#2)
+ */
+export function fileLabel(file?: DiffFileMeta): string | undefined {
+  const newPath = file?.newPath && file.newPath !== "/dev/null" ? file.newPath : undefined;
+  const oldPath = file?.oldPath && file.oldPath !== "/dev/null" ? file.oldPath : undefined;
+  if (newPath && oldPath && newPath !== oldPath) return `${oldPath} → ${newPath}`;
+  return newPath ?? oldPath;
+}
+
 /** Acceptance status for a single hunk. */
 export type AcceptanceStatus = "accepted" | "rejected" | "pending";
 

@@ -17,6 +17,7 @@ import type {
   DiffSegment,
   Hunk,
 } from "../diff/types";
+import { fileLabel } from "../diff/types";
 import { emitHunkActivity } from "../activity";
 import type {
   FancyDiffProps,
@@ -391,7 +392,7 @@ function FileBlock({
   accept,
   reject,
 }: FileBlockProps) {
-  const label = diff.file?.newPath ?? diff.file?.oldPath;
+  const label = fileLabel(diff.file);
   return (
     <div data-fancy-diff-file={fileIndex} role="rowgroup">
       {label && (
