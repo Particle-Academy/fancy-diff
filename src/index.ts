@@ -17,17 +17,25 @@ export type {
   GutterRenderArgs,
 } from "./components/FancyDiff.types";
 
-// Diff engine (pure, zero-dep).
-export { computeDiff, buildDiff, splitLines, hunkId } from "./diff/engine";
-export type { ComputeDiffOptions } from "./diff/engine";
-export { diffSequences } from "./diff/lcs";
-export type { EditOp } from "./diff/lcs";
-export { diffLineSegments, defaultWordTokenizer } from "./diff/segments";
-export { hash32 } from "./diff/hash";
+// Diff core — lives in @particle-academy/fancy-file-commons (the shared pure
+// core for the Fancy file packages: editors, viewers, writers, diff surfaces)
+// and is re-exported here verbatim, so the fancy-diff public surface is
+// unchanged and existing consumers keep a single import.
+export {
+  computeDiff,
+  buildDiff,
+  splitLines,
+  hunkId,
+  diffSequences,
+  diffLineSegments,
+  defaultWordTokenizer,
+  hash32,
+} from "@particle-academy/fancy-file-commons";
+export type { ComputeDiffOptions, EditOp } from "@particle-academy/fancy-file-commons";
 
 // Unified-diff datasource.
-export { parseUnifiedDiff } from "./diff/unified";
-export type { ParseUnifiedOptions } from "./diff/unified";
+export { parseUnifiedDiff } from "@particle-academy/fancy-file-commons";
+export type { ParseUnifiedOptions } from "@particle-academy/fancy-file-commons";
 
 // Source resolution (the discriminated union).
 export {
@@ -35,18 +43,26 @@ export {
   isDocumentsSource,
   isUnifiedSource,
   isPrebuiltSource,
-} from "./diff/source";
+} from "@particle-academy/fancy-file-commons";
 export type {
   DiffSource,
   DocumentsSource,
   UnifiedSource,
   PrebuiltSource,
   ResolveSourceOptions,
-} from "./diff/source";
+} from "@particle-academy/fancy-file-commons";
 
 // Merge resolution.
-export { mergeResult, mergeLines, setAllStatus } from "./diff/merge";
-export type { MergeOptions } from "./diff/merge";
+export { mergeResult, mergeLines, setAllStatus } from "@particle-academy/fancy-file-commons";
+export type { MergeOptions } from "@particle-academy/fancy-file-commons";
+
+// Per-line gutter annotations (editor gutters, diff rails, minimaps).
+export { diffAnnotations, annotateLines } from "@particle-academy/fancy-file-commons";
+export type {
+  DiffAnnotations,
+  LineAnnotation,
+  LineChangeType,
+} from "@particle-academy/fancy-file-commons";
 
 // Observable activity (optional fancy-auto-common integration).
 export { setDiffActivityEmitter, emitHunkActivity } from "./activity";
@@ -72,5 +88,5 @@ export type {
   AcceptanceState,
   AcceptanceStatus,
   WordTokenizer,
-} from "./diff/types";
-export { fileLabel } from "./diff/types";
+} from "@particle-academy/fancy-file-commons";
+export { fileLabel } from "@particle-academy/fancy-file-commons";

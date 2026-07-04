@@ -8,16 +8,16 @@ import {
   type ReactNode,
 } from "react";
 import { Button, Badge, Card, Separator } from "@particle-academy/react-fancy";
-import { resolveSource } from "../diff/source";
-import { mergeResult } from "../diff/merge";
+import { resolveSource } from "@particle-academy/fancy-file-commons";
+import { mergeResult } from "@particle-academy/fancy-file-commons";
 import type {
   AcceptanceState,
   AcceptanceStatus,
   Diff,
   DiffSegment,
   Hunk,
-} from "../diff/types";
-import { fileLabel } from "../diff/types";
+} from "@particle-academy/fancy-file-commons";
+import { fileLabel } from "@particle-academy/fancy-file-commons";
 import { emitHunkActivity } from "../activity";
 import type {
   FancyDiffProps,

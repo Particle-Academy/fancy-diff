@@ -5,8 +5,8 @@ import type {
   Diff,
   Hunk,
   WordTokenizer,
-} from "../diff/types";
-import type { DiffSource } from "../diff/source";
+} from "@particle-academy/fancy-file-commons";
+import type { DiffSource } from "@particle-academy/fancy-file-commons";
 import type { DiffActivityEmitter, DiffActor } from "../activity";
 
 /** Split = side-by-side; inline = single column with +/- rows. */

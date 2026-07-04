@@ -9,7 +9,10 @@ fluidly.
 
 - **No server processing.** The diff algorithm (line-level LCS + intra-line
   word/char diff) runs in-browser, in-house. **Zero third-party runtime
-  dependencies.**
+  dependencies** — the core lives in
+  [`@particle-academy/fancy-file-commons`](https://github.com/Particle-Academy/fancy-file-commons)
+  (our shared pure core for the file packages, re-exported here verbatim), so
+  fancy-code's diff gutter and this viewer agree on every hunk.
 - **Three datasources.** Diff two documents, parse a git **unified diff**, or
   pass a pre-built structured diff.
 - **Composes react-fancy.** Toolbar, buttons, badges, cards, separators are

@@ -11,6 +11,7 @@ export default defineConfig({
     "react-dom",
     "@particle-academy/react-fancy",
     "@particle-academy/fancy-auto-common",
+    "@particle-academy/fancy-file-commons",
   ],
   treeshake: true,
 });
