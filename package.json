@@ -67,5 +67,8 @@
   ],
   "dependencies": {
     "@particle-academy/fancy-file-commons": "^0.1.0"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
   }
 }
