@@ -1,6 +1,6 @@
 {
   "name": "@particle-academy/fancy-diff",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Client-side React UI for side-by-side document diffs with per-hunk accept/reject and merged output — Human+ UX. Diff core shared via @particle-academy/fancy-file-commons.",
   "repository": {
     "type": "git",
@@ -66,7 +66,7 @@
     "**/*.css"
   ],
   "dependencies": {
-    "@particle-academy/fancy-file-commons": "^0.2.0"
+    "@particle-academy/fancy-file-commons": ">=0.2 <2.0"
   },
   "overrides": {
     "esbuild": "^0.28.1"
