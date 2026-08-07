@@ -1,7 +1,7 @@
 {
   "name": "@particle-academy/fancy-diff",
-  "version": "0.3.2",
-  "description": "Client-side React UI for side-by-side document diffs with per-hunk accept/reject and merged output \u2014 Human+ UX. Diff core shared via @particle-academy/fancy-file-commons.",
+  "version": "0.4.0",
+  "description": "Client-side React UI for side-by-side document diffs with per-hunk accept/reject and merged output — Human+ UX. Diff core shared via @particle-academy/fancy-file-commons.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Particle-Academy/fancy-diff.git"
@@ -40,8 +40,8 @@
   "peerDependencies": {
     "@particle-academy/fancy-auto-common": ">=0.1.0",
     "@particle-academy/react-fancy": ">=2",
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "peerDependenciesMeta": {
     "@particle-academy/fancy-auto-common": {
@@ -50,12 +50,12 @@
   },
   "devDependencies": {
     "@particle-academy/react-fancy": "^4.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "tsup": "^8.5.0",
     "tsx": "^4.19.0",
     "typescript": "^5.8.0",
@@ -73,5 +73,8 @@
   },
   "overrides": {
     "esbuild": "^0.28.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
