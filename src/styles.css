@@ -16,6 +16,24 @@
   overflow-x: auto;
 }
 
+/* A diff is read line-against-line, so a wrapped line silently breaks the
+   correspondence the view exists to show -- and it breaks INSIDE tokens, turning
+   `$plan->amount` into `$plan-` / `>amount;`. Each source line stays on one row
+   and the body above scrolls instead. `white-space` inherits, so declaring it on
+   the root reaches every row.
+
+   Until 0.5.0 the rows carried `whitespace-pre-wrap break-words`, which meant
+   nothing could ever overflow and the `overflow-x` above was dead. Set the
+   `wrap` prop to opt back in. */
+[data-fancy-diff] {
+  white-space: pre;
+}
+
+[data-fancy-diff][data-fancy-diff-wrap] {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 /* Keep added/removed rows visually distinct even without Tailwind loaded. */
 [data-fancy-diff-hunk-type="add"] {
   --fancy-diff-accent: 16 185 129;

@@ -14,6 +14,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## 0.5.0 — 2026-08-18
+
+### Fixed
+
+- **Long lines no longer break mid-token.** The stylesheet has always set
+  `[data-fancy-diff-body] { overflow-x: auto }`, but every line row rendered
+  with `whitespace-pre-wrap break-words` — so nothing could ever overflow and
+  that rule was dead. What you actually got was `$plan->amount` split across two
+  rows after the hyphen, which destroys the line-against-line correspondence a
+  diff exists to show, and does it silently, because a wrapped diff still looks
+  like a diff.
+
+  The two rules contradicted each other; `overflow-x` is the one that said what
+  was intended. Each source line now stays on one row and the body scrolls.
+
+  **This is a visible change.** If you preferred wrapping, pass the new `wrap`
+  prop — nothing else moves.
+
+  ```tsx
+  <FancyDiff source={{ before, after }} wrap />
+  ```
+
+### Changed
+
+- **Whitespace is owned by `styles.css`, not a Tailwind utility.** This package
+  is absent from most consumers' Tailwind `@source` list, so a utility class
+  here is generated only when some *other* scanned file happens to use the same
+  one — it worked by coincidence or not at all. The stylesheet is already a
+  required import, which makes it the only thing guaranteed to be present.
+
+  It is declared once on the root (`white-space` inherits) rather than repeated
+  across the five places rows are rendered, where one path keeping a stale value
+  is exactly the drift that survives review. The root carries
+  `data-fancy-diff-wrap` when wrapping is on, so you can style against it.
+
+
 ## [0.4.0] — 2026-08-07
 
 ### Changed

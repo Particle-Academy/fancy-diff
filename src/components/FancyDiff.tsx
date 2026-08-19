@@ -120,6 +120,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
       activity,
       showToolbar = true,
       showGutter = true,
+      wrap = false,
       className,
       theme = "auto",
       header,
@@ -127,6 +128,15 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
 
     // `compare` strips the whole acceptance UX — read-only comparison only.
     const interactive = variant !== "compare";
+
+    // One value, spliced into every line row, because there are five of them
+    // (split before/after, inline, and the equal-context rows) and a diff whose
+    // sides disagree about wrapping is worse than either choice.
+    //
+    // `pre` — not `pre-wrap` — is what makes the stylesheet's
+    // `[data-fancy-diff-body] { overflow-x: auto }` mean anything: while rows
+    // wrapped, nothing could overflow and that rule was dead.
+
 
     // Resolve `theme="auto"` at runtime: prefer an explicit host signal (a
     // `.dark` class / `data-theme="dark"` / `color-scheme` on <html>), then fall
@@ -336,6 +346,7 @@ export const FancyDiff = forwardRef<FancyDiffHandle, FancyDiffProps>(
           className,
         )}
         data-fancy-diff=""
+        data-fancy-diff-wrap={wrap ? "" : undefined}
         data-fancy-diff-mode={mode}
         data-fancy-diff-variant={variant}
       >
@@ -563,7 +574,7 @@ function SplitSimple({
           <div key={i} className="grid grid-cols-2" role="row">
             <div
               className={cx(
-                "flex items-start gap-1 px-2 py-0.5 whitespace-pre-wrap break-words min-h-[1.4em] border-r border-zinc-100 dark:border-zinc-800",
+                "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em] border-r border-zinc-100 dark:border-zinc-800",
                 line.side === "before" && sideBg.remove,
               )}
             >
@@ -573,7 +584,7 @@ function SplitSimple({
             </div>
             <div
               className={cx(
-                "flex items-start gap-1 px-2 py-0.5 whitespace-pre-wrap break-words min-h-[1.4em]",
+                "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em]",
                 line.side === "after" && sideBg.add,
               )}
             >
@@ -613,7 +624,7 @@ function SplitReplace({
           <div key={i} className="grid grid-cols-2" role="row">
             <div
               className={cx(
-                "flex items-start gap-1 px-2 py-0.5 whitespace-pre-wrap break-words min-h-[1.4em] border-r border-zinc-100 dark:border-zinc-800",
+                "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em] border-r border-zinc-100 dark:border-zinc-800",
                 b && sideBg.replaceBefore,
               )}
             >
@@ -623,7 +634,7 @@ function SplitReplace({
             </div>
             <div
               className={cx(
-                "flex items-start gap-1 px-2 py-0.5 whitespace-pre-wrap break-words min-h-[1.4em]",
+                "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em]",
                 a && sideBg.replaceAfter,
               )}
             >
@@ -676,7 +687,7 @@ function Inline({
             key={i}
             role="row"
             className={cx(
-              "flex items-start gap-1 px-2 py-0.5 whitespace-pre-wrap break-words min-h-[1.4em]",
+              "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em]",
               bg,
             )}
           >

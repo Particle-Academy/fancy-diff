@@ -116,6 +116,15 @@ export interface FancyDiffProps {
   showToolbar?: boolean;
   /** Show line-number gutters. Default true. */
   showGutter?: boolean;
+  /**
+   * Wrap long lines instead of scrolling them. Default **false**.
+   *
+   * A diff is read line-against-line, so a wrapped line silently breaks the
+   * correspondence the view exists to show -- and it breaks INSIDE tokens,
+   * turning `$plan->amount` into `$plan-` / `>amount;`. The default keeps each
+   * source line on one row and lets the body scroll horizontally.
+   */
+  wrap?: boolean;
 
   /** Root className passthrough. */
   className?: string;

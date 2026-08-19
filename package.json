@@ -1,6 +1,6 @@
 {
   "name": "@particle-academy/fancy-diff",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Client-side React UI for side-by-side document diffs with per-hunk accept/reject and merged output — Human+ UX. Diff core shared via @particle-academy/fancy-file-commons.",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit && eslint .",
-    "test": "node --import tsx --test test/*.test.ts",
+    "test": "node --import tsx --test \"test/*.test.ts\" \"test/*.test.tsx\"",
     "clean": "rm -rf dist",
     "prepublishOnly": "tsup"
   },
