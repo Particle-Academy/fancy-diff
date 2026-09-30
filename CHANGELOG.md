@@ -14,6 +14,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## 0.5.1 — 2026-09-29
+
+### Fixed
+
+- **The published tarball now ships `docs/`.** `files` was
+  `["dist", "README.md"]` and there was no `docs/` directory, so the package
+  went to npm with a README and nothing else. The workspace publishing protocol
+  lists `dist`, `docs`, `README.md` as a hard requirement for a TS package
+  precisely so a tarball carries its own reference — an agent resolving the
+  package offline has only what shipped.
+
+  Adds `docs/FancyDiff.md`: the full prop table, the three `source` shapes, the
+  `pendingMode` propose-then-confirm contract, the imperative handle, why `wrap`
+  defaults to `false`, and a pointer to the shared diff core in
+  `fancy-file-commons` that this package re-exports.
+
+  No code changed.
+
 ## 0.5.0 — 2026-08-18
 
 ### Fixed
