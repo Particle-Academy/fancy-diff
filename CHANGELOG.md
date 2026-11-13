@@ -23,6 +23,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **The diff body's table semantics are valid** (axe `aria-required-children`
+  and `aria-required-parent`, both critical, lab run 601, K30). Each hunk was
+  `role="row"` holding the line rows and the accept/reject buttons, a row
+  inside a row, and each line row held bare divs instead of cells. Now: the
+  hunk (`[data-fancy-diff-hunk]`) has no role and groups its line rows; every
+  line row holds `role="cell"` elements; the accept/reject controls sit in a
+  row and cell of their own (`[data-fancy-diff-hunk-actions-row]`, the cell
+  keeping `[data-fancy-diff-hunk-actions]`); and the file label is a row with a
+  `rowheader`. Nothing changes visually. Nothing to do unless you selected
+  hunks by `[role="row"]`; use `[data-fancy-diff-hunk]`.
+
 - **`CHANGELOG.md` is now in the published tarball.** `files` did not whitelist it, so npm never shipped it — and this package puts breaking changes in MINOR releases and tells you in the README to read the entry before taking one. The instruction existed for the author, who has the file, and not for the consumer, who is the only one being instructed. Nothing for you to do; the file simply arrives from this release on.
 
 ## 0.5.1 — 2026-09-29

@@ -407,13 +407,16 @@ function FileBlock({
   return (
     <div data-fancy-diff-file={fileIndex} role="rowgroup">
       {label && (
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-50 dark:bg-zinc-800/60 border-b border-zinc-200 dark:border-zinc-700 text-xs">
+        // The file's heading row: inside the rowgroup, so it must be a row.
+        <div role="row" data-fancy-diff-file-label="">
+        <div role="rowheader" className="flex items-center gap-2 px-3 py-1.5 bg-zinc-50 dark:bg-zinc-800/60 border-b border-zinc-200 dark:border-zinc-700 text-xs">
           <span className="font-semibold text-zinc-700 dark:text-zinc-300">{label}</span>
           {diff.file?.partial && (
             <Badge color="amber" variant="soft" size="sm" title="Unified diff: only changed hunks + context are present">
               partial
             </Badge>
           )}
+        </div>
         </div>
       )}
       {diff.hunks.map((hunk) => {
@@ -489,7 +492,6 @@ function HunkRow({
       data-fancy-diff-hunk={hunk.id}
       data-fancy-diff-hunk-type={hunk.type}
       data-fancy-diff-hunk-status={isChange && interactive ? status : undefined}
-      role="row"
       className={cx(
         "group relative",
         dimmed && "opacity-50",
@@ -514,7 +516,13 @@ function HunkRow({
       )}
 
       {isChange && interactive && (
+        // The controls get a row and cell of their own: a hunk is a run of
+        // line rows, and a button loose in the rowgroup (or a row nested in a
+        // row, which the hunk used to be) is invalid table structure. The cell
+        // is absolutely positioned against the hunk, so the row takes no space.
+        <div role="row" data-fancy-diff-hunk-actions-row="">
         <div
+          role="cell"
           data-fancy-diff-hunk-actions=""
           className="absolute right-1.5 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"
         >
@@ -539,6 +547,7 @@ function HunkRow({
             onClick={reject}
             data-fancy-diff-reject={hunk.id}
           />
+        </div>
         </div>
       )}
     </div>
@@ -573,6 +582,7 @@ function SplitSimple({
         return (
           <div key={i} className="grid grid-cols-2" role="row">
             <div
+              role="cell"
               className={cx(
                 "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em] border-r border-zinc-100 dark:border-zinc-800",
                 line.side === "before" && sideBg.remove,
@@ -583,6 +593,7 @@ function SplitSimple({
               <span>{leftFilled ? leftText : ""}</span>
             </div>
             <div
+              role="cell"
               className={cx(
                 "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em]",
                 line.side === "after" && sideBg.add,
@@ -623,6 +634,7 @@ function SplitReplace({
         return (
           <div key={i} className="grid grid-cols-2" role="row">
             <div
+              role="cell"
               className={cx(
                 "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em] border-r border-zinc-100 dark:border-zinc-800",
                 b && sideBg.replaceBefore,
@@ -633,6 +645,7 @@ function SplitReplace({
               <span>{b ? (seg ? renderSegments(seg.before, "remove") : b.text) : ""}</span>
             </div>
             <div
+              role="cell"
               className={cx(
                 "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em]",
                 a && sideBg.replaceAfter,
@@ -683,9 +696,9 @@ function Inline({
           }
         }
         return (
+          <div key={i} role="row">
           <div
-            key={i}
-            role="row"
+            role="cell"
             className={cx(
               "flex items-start gap-1 px-2 py-0.5 min-h-[1.4em]",
               bg,
@@ -705,6 +718,7 @@ function Inline({
               {sign}
             </span>
             <span>{content}</span>
+          </div>
           </div>
         );
       })}
