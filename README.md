@@ -3,7 +3,7 @@
 [![Fancified](art/fancified.svg)](https://particle.academy)
 
 Client-side React UI for **side-by-side document diffs** with per-hunk
-accept / reject and a merged result — built for the Fancy UI **Human+**
+accept / reject and a merged result — built for the Fancy Dev Kit **Human+**
 mission, where humans and agents share the same surface and trade control
 fluidly.
 
@@ -224,7 +224,7 @@ MIT
 
 ---
 
-## ⭐ Star Fancy UI
+## ⭐ Star Fancy Dev Kit
 
 If this package is useful to you, a quick ⭐ on the repo really helps us build a better kit. Thank you!
 
